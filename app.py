@@ -1,7 +1,7 @@
 from flask import Flask
 from config import vuln_app
 import os
-from darkspark_python_wsgi import darkspark
+from darkspark_python_wsgi-0.1.0-py3-none-any.whl import darkspark
 
 app = Flask("__main__")
 
@@ -15,7 +15,7 @@ vuln = int(os.getenv('vulnerable', 1))
 # token alive for how many seconds?
 alive = int(os.getenv('tokentimetolive', 600))
 
-vuln_app.app.wsgi_app = darkspark(vuln_app.app.wsgi_app, 'key-2ee36b42dc51e31d61af953c2aaeba546999d739de15ba5c4d225a440f275591')
+vuln_app.app.wsgi_app = darkspark(vuln_app.app.wsgi_app, 'Enter Key Here')
 
 # start the app with port 2233 and debug on!
 if __name__ == '__main__':
