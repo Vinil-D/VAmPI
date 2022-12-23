@@ -12,18 +12,22 @@ class User(db.Model):
     username = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
+    phone_number = db.Column(db.String(128), nullable=False)
+    national_insurance = db.Column(db.String(128), nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
 
     books = relationship("Book", order_by=Book.id, back_populates="user")
 
-    def __init__(self, username, password, email, admin=False):
+    def __init__(self, username, password, email, phone_number, national_insurance, admin=False):
         self.username = username
         self.email = email
         self.password = password
+        self.phone_number = phone_number
+        self.national_insurance = national_insurance
         self.admin = admin
 
     def __repr__(self):
-        return f"<User(name={self.username}, email={self.email})>"
+        return f"<User(name={self.username}, email={self.email}, phone_number={self.phone_number}, national_insurance={self.national_insurance})>"
 
     def encode_auth_token(self, user_id):
         try:
@@ -51,10 +55,10 @@ class User(db.Model):
             return 'Invalid token. Please log in again.'
 
     def json(self):
-        return{'username': self.username, 'email': self.email}
+        return{'username': self.username, 'email': self.email, 'phone_number': self.phone_number}
 
     def json_debug(self):
-        return{'username': self.username, 'password': self.password, 'email': self.email, 'admin': self.admin}
+        return{'username': self.username, 'password': self.password, 'email': self.email, 'phone_number': self.phone_number, 'national_insurance': self.national_insurance, 'admin': self.admin}
 
     @staticmethod
     def get_all_users():
@@ -79,8 +83,8 @@ class User(db.Model):
         return fin_query
 
     @staticmethod
-    def register_user(username, password, email, admin=False):
-        new_user = User(username=username, password=password, email=email, admin=admin)
+    def register_user(username, password, email, phone_number, national_insurance, admin=False):
+        new_user = User(username=username, password=password, email=email, phone_number=phone_number, national_insurance=national_insurance, admin=admin)
         randomint = str(randrange(100))
         new_user.books = [Book(book_title="bookTitle" + randomint, secret_content="secret for bookTitle" + randomint)]
         db.session.add(new_user)
@@ -94,6 +98,6 @@ class User(db.Model):
 
     @staticmethod
     def init_db_users():
-        User.register_user("name1", "pass1", "mail1@mail.com", False)
-        User.register_user("name2", "pass2", "mail2@mail.com", False)
-        User.register_user("admin", "pass1", "admin@mail.com", True)
+        User.register_user("name1", "pass1", "mail1@mail.com", "777666555", "A123456", False)
+        User.register_user("name2", "pass2", "mail2@mail.com", "111222333", "B123456", False)
+        User.register_user("admin", "pass1", "admin@mail.com", "000111000", "C123456", True)
